@@ -1,0 +1,32 @@
+name: Pull Request Check
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-electron:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: electron
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+
+  lint-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        run: npm ci
+      - name: Test
+        run: npm lint

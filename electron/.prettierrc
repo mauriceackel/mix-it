@@ -1,0 +1,15 @@
+{
+  "semi": true,
+  "trailingComma": "all",
+  "singleQuote": true,
+  "importOrder": [
+    "^services/(.*)$",
+    "^utils/(.*)$",
+    "^assets/(.*)$",
+    "^models/(.*)$",
+    "^@(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}

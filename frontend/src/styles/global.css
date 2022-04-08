@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Open+Sans+Condensed:wght@700&family=Open+Sans:wght@300;400;700&display=swap');
+
+html,
+body {
+  @apply overflow-hidden bg-gray-800;
+}
+
+::-webkit-scrollbar {
+  @apply w-1 h-1;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded bg-white bg-opacity-20;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-corner {
+  @apply hidden;
+}
+
+* {
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0;
+  @apply select-none;
+}
+
+.flashing {
+  animation: flashing 1s ease-in-out infinite;
+}
+
+@keyframes flashing {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
