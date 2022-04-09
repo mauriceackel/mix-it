@@ -1,6 +1,6 @@
 # MixIt 🎧🔥
 
-A song recommendation tool dor DJs
+A song recommendation tool for DJs
 
 ## About
 MixIt is a tool that can help you in your song selection process.
