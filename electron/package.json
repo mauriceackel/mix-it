@@ -22,7 +22,8 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "name": "MixIt"
+        "name": "MixIt",
+        "icon": "assets/mixit.icns"
       },
       "makers": [
         {
