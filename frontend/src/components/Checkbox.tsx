@@ -4,8 +4,8 @@ import { v4 as uuid } from 'uuid';
 
 interface CheckboxProps {
   disabled?: boolean;
-  checked: boolean;
-  onChange: () => void;
+  checked?: boolean;
+  onChange?: () => void;
 }
 function Checkbox(props: PropsWithChildren<CheckboxProps>): ReactElement {
   const { disabled = false, checked, onChange, children } = props;

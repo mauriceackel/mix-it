@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import MiniSearch from 'minisearch';
 import objectHash from 'object-hash';
 import React, {
   ReactElement,
@@ -16,7 +17,14 @@ import SongContext from 'services/songs';
 
 import Track from 'models/Track';
 
+import Autocomplete from './Autocomplete';
 import Checkbox from './Checkbox';
+
+type IndexedTrack = {
+  id: string; // = <playlistId>-<trackIndex>
+  playlistId: string;
+  trackIndex: number;
+};
 
 type RecommendationsProps = {
   className?: string;
@@ -32,7 +40,7 @@ function Recommendations(props: RecommendationsProps): ReactElement {
     dispatch: dispatchConfig,
   } = useContext(ConfigContext);
 
-  const [searchText, setSearchText] = useState<string>();
+  const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
     if (serverRunning && autoUpdate && currentSong) {
@@ -41,7 +49,31 @@ function Recommendations(props: RecommendationsProps): ReactElement {
     }
   }, [serverRunning, autoUpdate, currentSong]);
 
-  const rows = useMemo(() => {
+  const searchDb = useMemo(() => {
+    const searchIdx = new MiniSearch<Track & IndexedTrack>({
+      fields: ['title', 'artist'],
+      storeFields: ['playlistId', 'trackIndex'],
+      searchOptions: { prefix: true },
+    });
+
+    const allTracks: (Track & IndexedTrack)[] = selectedPlaylists.flatMap(
+      (playlist) => {
+        return playlist.tracks.map((track, trackIndex) => {
+          return {
+            ...track,
+            id: `${playlist.id}-${trackIndex}`,
+            playlistId: playlist.id,
+            trackIndex,
+          };
+        });
+      },
+    );
+    searchIdx.addAll(allTracks);
+
+    return searchIdx;
+  }, [selectedPlaylists]);
+
+  const rowData = useMemo(() => {
     const rowCount = 2 * trackCount + 1;
 
     if (rowCount <= 0 || Number.isNaN(rowCount)) {
@@ -49,7 +81,7 @@ function Recommendations(props: RecommendationsProps): ReactElement {
     }
 
     // Prepare rows
-    const result: RowModel[] = new Array(rowCount)
+    const rows: RowDataModel[] = new Array(rowCount)
       .fill(undefined)
       .map((_, index) => ({
         id: uuid(),
@@ -57,33 +89,29 @@ function Recommendations(props: RecommendationsProps): ReactElement {
         tracks: [],
       }));
 
-    // Fill rows based on matched tracks in selected playlists
-    selectedPlaylists.forEach((playlist) => {
-      // Find song in playlist
-      const matchedIndices = findAllIndices(playlist.tracks, (track) => {
-        return isTrackMatch(track, searchText);
-      });
+    // Perform full text search on all tracks
+    const results = searchDb.search(searchText) as unknown as IndexedTrack[];
 
-      // Write all relevant surrounding tracks to rows
-      matchedIndices.forEach((index) => {
+    // Fill rows based on matched tracks in selected playlists
+    results.forEach((result) => {
+      // Get actual playlist
+      const playlist = selectedPlaylists.find(
+        (p) => p.id === result.playlistId,
+      );
+
+      if (playlist === undefined) return;
+
         for (let i = 0; i < rowCount; i += 1) {
-          const surroundingTrack = playlist.tracks[index + i - trackCount];
+        const surroundingTrack =
+          playlist.tracks[result.trackIndex + i - trackCount];
           if (surroundingTrack) {
-            result[i].tracks.push(surroundingTrack);
+          rows[i].tracks.push(surroundingTrack);
           }
         }
-      });
     });
 
-    return result;
-  }, [searchText, selectedPlaylists, trackCount]);
-
-  const handleSearchTextChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchText(event.currentTarget.value);
-    },
-    [],
-  );
+    return rows;
+  }, [searchText, searchDb, selectedPlaylists, trackCount]);
 
   const handleTrackCountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -115,6 +143,15 @@ function Recommendations(props: RecommendationsProps): ReactElement {
     [dispatchConfig, autoUpdate],
   );
 
+  const getSuggestions = useCallback(
+    (text: string) => {
+      return searchDb
+        .autoSuggest(text, { fuzzy: true })
+        .map((result) => result.suggestion);
+    },
+    [searchDb],
+  );
+
   return (
     <div className={className}>
       <div className="flex flex-col w-full h-full p-2 bg-gray-600 text-white overflow-hidden">
@@ -129,12 +166,10 @@ function Recommendations(props: RecommendationsProps): ReactElement {
             onBlur={handleTrackCountBlur}
           />
 
-          <input
-            type="text"
-            className="min-w-0 p-2 mr-4 flex-grow rounded bg-gray-800 outline-pink-600"
-            placeholder="Title or Artist"
+          <Autocomplete
             value={searchText}
-            onChange={handleSearchTextChange}
+            onChange={setSearchText}
+            suggestions={getSuggestions}
           />
 
           <Checkbox checked={autoUpdate} onChange={toggleAutoUpdate}>
@@ -143,8 +178,8 @@ function Recommendations(props: RecommendationsProps): ReactElement {
         </header>
 
         <div className="grid grid-cols-1 auto-rows-fr gap-2 overflow-hidden">
-          {rows.map((row) => (
-            <Row key={row.id} row={row} />
+          {rowData.map((data) => (
+            <Row key={data.id} rowData={data} />
           ))}
         </div>
       </div>
@@ -153,17 +188,17 @@ function Recommendations(props: RecommendationsProps): ReactElement {
 }
 
 interface RowProps {
-  row: RowModel;
+  rowData: RowDataModel;
 }
 function Row(props: RowProps): ReactElement {
-  const { row } = props;
+  const { rowData } = props;
 
   return (
     <div
-      style={{ '--tw-bg-opacity': row.heat } as any}
+      style={{ '--tw-bg-opacity': rowData.heat } as any}
       className="flex flex-col overflow-y-auto bg-pink-600 rounded"
     >
-      {row.tracks.map((track, i) => (
+      {rowData.tracks.map((track, i) => (
         <div
           key={objectHash(track)}
           className={classNames(
@@ -178,41 +213,10 @@ function Row(props: RowProps): ReactElement {
   );
 }
 
-interface RowModel {
+interface RowDataModel {
   id: string;
   heat: number;
   tracks: Track[];
-}
-
-function findAllIndices<T>(
-  array: Array<T>,
-  prediate: (value: T, index: number, obj: T[]) => unknown,
-): number[] {
-  const result: number[] = [];
-
-  array.forEach((element, index) => {
-    if (prediate(element, index, array)) {
-      result.push(index);
-    }
-  });
-
-  return result;
-}
-
-function isTrackMatch(track: Track, searchText: string | undefined): boolean {
-  if (!searchText) return false;
-
-  try {
-    const isMatch =
-      !!track.title?.includes(searchText) ||
-      !!track.artist?.includes(searchText);
-
-    return isMatch;
-  } catch (err) {
-    console.log(track.title, track.artist);
-  }
-
-  return false;
 }
 
 export default Recommendations;
