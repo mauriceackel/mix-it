@@ -49,7 +49,7 @@ function Playlists(props: PlaylistsProps): ReactElement {
 interface PlaylistEntryProps {
   playlist: Playlist;
 }
-function PlaylistEntry(props: PlaylistEntryProps): ReactElement {
+export function PlaylistEntry(props: PlaylistEntryProps): ReactElement {
   const { playlist } = props;
 
   const { selectedPlaylists, dispatch } = useContext(PlaylistContext);
@@ -72,7 +72,10 @@ function PlaylistEntry(props: PlaylistEntryProps): ReactElement {
   }, [dispatch, playlist]);
 
   return (
-    <div className="flex items-center justify-between">
+    <div
+      className="flex items-center justify-between"
+      data-testid="playlistEntry"
+    >
       <Checkbox checked={selected} onChange={handleSelection}>
         <p className="select-none">{playlist.name}</p>
       </Checkbox>

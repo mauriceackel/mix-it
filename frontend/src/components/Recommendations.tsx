@@ -101,13 +101,13 @@ function Recommendations(props: RecommendationsProps): ReactElement {
 
       if (playlist === undefined) return;
 
-        for (let i = 0; i < rowCount; i += 1) {
+      for (let i = 0; i < rowCount; i += 1) {
         const surroundingTrack =
           playlist.tracks[result.trackIndex + i - trackCount];
-          if (surroundingTrack) {
+        if (surroundingTrack) {
           rows[i].tracks.push(surroundingTrack);
-          }
         }
+      }
     });
 
     return rows;
@@ -164,6 +164,7 @@ function Recommendations(props: RecommendationsProps): ReactElement {
             value={trackCount}
             onChange={handleTrackCountChange}
             onBlur={handleTrackCountBlur}
+            data-testid="trackCountInput"
           />
 
           <Autocomplete
@@ -197,6 +198,7 @@ function Row(props: RowProps): ReactElement {
     <div
       style={{ '--tw-bg-opacity': rowData.heat } as any}
       className="flex flex-col overflow-y-auto bg-pink-600 rounded"
+      data-testid="trackRow"
     >
       {rowData.tracks.map((track, i) => (
         <div
