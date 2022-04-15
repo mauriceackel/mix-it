@@ -1,4 +1,5 @@
 /* eslint-disable react/require-default-props */
+import classNames from 'classnames';
 import React, { PropsWithChildren, ReactElement, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
@@ -14,7 +15,10 @@ function Checkbox(props: PropsWithChildren<CheckboxProps>): ReactElement {
 
   return (
     <label
-      className={`flex items-center ${disabled && 'opacity-30'}`}
+      className={classNames(
+        'flex items-center cursor-pointer',
+        disabled && 'opacity-30',
+      )}
       htmlFor={id}
     >
       <div className="w-4 h-4 flex items-center justify-center flex-shrink-0 border rounded border-pink-600 mr-2">

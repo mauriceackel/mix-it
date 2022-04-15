@@ -81,7 +81,9 @@ export function PlaylistEntry(props: PlaylistEntryProps): ReactElement {
       </Checkbox>
 
       {editEnabled && (
-        <TrashIcon className="text-pink-600 h-4" onClick={handleDelete} />
+        <button type="button" onClick={handleDelete}>
+          <TrashIcon className="text-pink-600 h-4" />
+        </button>
       )}
     </div>
   );

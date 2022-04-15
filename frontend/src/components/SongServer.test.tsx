@@ -1,11 +1,6 @@
-import {
-  RenderOptions,
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { nextTick } from 'process';
-import React, { ContextType, ReactElement } from 'react';
+import React, { ContextType } from 'react';
 
 import ConfigContext, {
   defaultContext as defaultConfigContext,
@@ -16,6 +11,8 @@ import SongContext, {
   stopSongServer,
 } from 'services/songs';
 
+import { configContextRender, songContextRender } from 'utils/testHelpers';
+
 import SongServer from './SongServer';
 
 jest.mock('services/songs');
@@ -25,32 +22,6 @@ const mockedStartServer = startSongServer as jest.MockedFunction<
 const mockedStopServer = stopSongServer as jest.MockedFunction<
   typeof stopSongServer
 >;
-
-const configContextRender = (
-  component: ReactElement,
-  providerValue: ContextType<typeof ConfigContext>,
-  renderOptions?: RenderOptions,
-) => {
-  return render(
-    <ConfigContext.Provider value={providerValue}>
-      {component}
-    </ConfigContext.Provider>,
-    renderOptions,
-  );
-};
-
-const songContextRender = (
-  component: ReactElement,
-  providerValue: ContextType<typeof SongContext>,
-  renderOptions?: RenderOptions,
-) => {
-  return render(
-    <SongContext.Provider value={providerValue}>
-      {component}
-    </SongContext.Provider>,
-    renderOptions,
-  );
-};
 
 it('renders element', () => {
   render(<SongServer />);

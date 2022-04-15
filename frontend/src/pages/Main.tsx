@@ -16,11 +16,16 @@ function Main(): ReactElement {
       <header className="flex items-center justify-between p-2 bg-gray-800 text-pink-600">
         <h1 className="text-2xl font-bold select-none">MixIt</h1>
 
-        {React.createElement(editEnabled ? LockOpenIcon : LockClosedIcon, {
-          className: 'h-6',
-          onClick: () =>
-            dispatch({ type: 'SET_EDIT_ENABLED', enabled: !editEnabled }),
-        })}
+        <button
+          type="button"
+          onClick={() =>
+            dispatch({ type: 'SET_EDIT_ENABLED', enabled: !editEnabled })
+          }
+        >
+          {React.createElement(editEnabled ? LockOpenIcon : LockClosedIcon, {
+            className: 'h-6',
+          })}
+        </button>
       </header>
 
       <section className="flex flex-grow overflow-hidden">

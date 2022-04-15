@@ -1,5 +1,5 @@
-import { RenderOptions, render, screen } from '@testing-library/react';
-import React, { ContextType, ReactElement } from 'react';
+import { render, screen } from '@testing-library/react';
+import React, { ContextType } from 'react';
 
 import ConfigContext, {
   defaultContext as defaultConfigContext,
@@ -8,35 +8,11 @@ import PlaylistContext, {
   defaultContext as defaultPlaylistContext,
 } from 'services/playlists';
 
+import { configContextRender, playlistContextRender } from 'utils/testHelpers';
+
 import Playlist from 'models/Playlist';
 
 import Playlists, { PlaylistEntry } from './Playlists';
-
-const playlistContextRender = (
-  component: ReactElement,
-  providerValue: ContextType<typeof PlaylistContext>,
-  renderOptions?: RenderOptions,
-) => {
-  return render(
-    <PlaylistContext.Provider value={providerValue}>
-      {component}
-    </PlaylistContext.Provider>,
-    renderOptions,
-  );
-};
-
-const configContextRender = (
-  component: ReactElement,
-  providerValue: ContextType<typeof ConfigContext>,
-  renderOptions?: RenderOptions,
-) => {
-  return render(
-    <ConfigContext.Provider value={providerValue}>
-      {component}
-    </ConfigContext.Provider>,
-    renderOptions,
-  );
-};
 
 it('renders element', () => {
   render(<Playlists />);
