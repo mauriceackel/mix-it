@@ -22,18 +22,6 @@ function Autocomplete(props: AutocompleteProps): ReactElement {
     return suggestions(value);
   }, [suggestions, value]);
 
-  const handleSuggestionSelection = useCallback(
-    (suggestionIndex: number) => {
-      const selectedSuggestion = resolvedSuggestions[suggestionIndex];
-      if (selectedSuggestion) {
-        onChange(selectedSuggestion);
-      }
-
-      setShowSuggestions(false);
-    },
-    [resolvedSuggestions, onChange],
-  );
-
   const handleSearchTextChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       onChange(event.currentTarget.value);
@@ -42,10 +30,32 @@ function Autocomplete(props: AutocompleteProps): ReactElement {
     [onChange],
   );
 
-  const handleSearchBoxBlur = useCallback(() => {
-    setShowSuggestions(false);
-    setSelectedSuggestionIndex(-1);
-  }, []);
+  const handleAutosuggestBlur = useCallback(
+    (event: React.FocusEvent<HTMLInputElement, Element>) => {
+      if (event.currentTarget.contains(event.relatedTarget)) {
+        // Ignore blur if suggestion is clicked
+        return;
+      }
+
+      setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
+    },
+    [],
+  );
+
+  const handleSuggestionSelection = useCallback(
+    (suggestionIndex: number) => {
+      const selectedSuggestion = resolvedSuggestions[suggestionIndex];
+
+      if (selectedSuggestion) {
+        onChange(selectedSuggestion);
+      }
+
+      setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
+    },
+    [resolvedSuggestions, onChange],
+  );
 
   const handleSearchBoxKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -72,7 +82,10 @@ function Autocomplete(props: AutocompleteProps): ReactElement {
   );
 
   return (
-    <div className="flex mr-4 flex-grow relative">
+    <div
+      className="flex mr-4 flex-grow relative"
+      onBlur={handleAutosuggestBlur}
+    >
       <input
         type="text"
         className="min-w-0 w-full p-2 pr-10 rounded bg-gray-800 outline-pink-600"
@@ -80,7 +93,6 @@ function Autocomplete(props: AutocompleteProps): ReactElement {
         value={value}
         onChange={handleSearchTextChange}
         onKeyDown={handleSearchBoxKeyDown}
-        onBlur={handleSearchBoxBlur}
         data-testid="searchInput"
       />
 
