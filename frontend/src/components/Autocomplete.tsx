@@ -1,3 +1,4 @@
+import { XCircleIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 import React, { ReactElement, useCallback, useMemo, useState } from 'react';
 
@@ -71,10 +72,10 @@ function Autocomplete(props: AutocompleteProps): ReactElement {
   );
 
   return (
-    <div className="mr-4 flex-grow relative">
+    <div className="flex mr-4 flex-grow relative">
       <input
         type="text"
-        className="min-w-0 w-full p-2 rounded bg-gray-800 outline-pink-600"
+        className="min-w-0 w-full p-2 pr-10 rounded bg-gray-800 outline-pink-600"
         placeholder="Title or Artist"
         value={value}
         onChange={handleSearchTextChange}
@@ -82,6 +83,12 @@ function Autocomplete(props: AutocompleteProps): ReactElement {
         onBlur={handleSearchBoxBlur}
         data-testid="searchInput"
       />
+
+      {!!value && (
+        <button type="button" className="-ml-8" onClick={() => onChange('')}>
+          <XCircleIcon className="h-6 opacity-50" />
+        </button>
+      )}
 
       {showSuggestions && resolvedSuggestions.length > 0 && (
         <div className="top-full mt-1 w-full bg-gray-700 rounded overflow-hidden shadow-xl absolute z-10">
