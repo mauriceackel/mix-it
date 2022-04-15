@@ -7,6 +7,8 @@ import React, {
   useReducer,
 } from 'react';
 
+import { invokeWrapper } from 'utils/errorBridge';
+
 import Playlist from 'models/Playlist';
 
 interface AddPlaylistsAction {
@@ -170,7 +172,9 @@ export async function importPlaylistsWeb(): Promise<Playlist[]> {
 }
 
 export async function importPlaylistsElectron(): Promise<Playlist[]> {
-  const playlists: Playlist[] = await window.electronApi.importPlaylists();
+  const playlists: Playlist[] = await invokeWrapper(
+    window.electronApi.importPlaylists(),
+  );
 
   return playlists;
 }

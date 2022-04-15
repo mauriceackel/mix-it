@@ -1,7 +1,9 @@
 import { IpcMainInvokeEvent, ipcMain } from 'electron';
 import net, { Server, Socket } from 'net';
 
-import Track from '@models/Track';
+import { handlerWrapper } from 'utils/errorBridge';
+
+import Track from 'models/Track';
 
 // Run song server
 let server: Server;
@@ -16,7 +18,7 @@ function cleanString(input?: string): string | undefined {
   return output;
 }
 
-ipcMain.handle('startSongServer', startSongServer);
+ipcMain.handle('startSongServer', handlerWrapper(startSongServer));
 
 async function startSongServer(
   ipcEvent: IpcMainInvokeEvent,
@@ -92,7 +94,7 @@ async function startSongServer(
   return result;
 }
 
-ipcMain.handle('stopSongServer', stopSongServer);
+ipcMain.handle('stopSongServer', handlerWrapper(stopSongServer));
 
 async function stopSongServer(ipcEvent: IpcMainInvokeEvent) {
   if (!server) {

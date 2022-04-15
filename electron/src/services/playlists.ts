@@ -1,11 +1,12 @@
 import { dialog, ipcMain } from 'electron';
 
 import PlaylistParser from 'utils/PlaylistParser';
+import { handlerWrapper } from 'utils/errorBridge';
 
-import type Playlist from '@models/Playlist';
+import type Playlist from 'models/Playlist';
 
 // Import playlist
-ipcMain.handle('importPlaylists', importPlaylists);
+ipcMain.handle('importPlaylists', handlerWrapper(importPlaylists));
 
 async function importPlaylists(): Promise<Playlist[]> {
   const dialogResult = await dialog.showOpenDialog({

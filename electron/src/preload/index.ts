@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-import ElectronApi from '@models/ElectronApi';
+import ElectronApi from 'models/ElectronApi';
 
 const electronApi: ElectronApi = {
   startSongServer: (host, port) =>

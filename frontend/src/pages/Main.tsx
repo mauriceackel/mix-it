@@ -1,6 +1,8 @@
 import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/outline';
 import { ELECTRON_ENABLED } from 'config';
 import React, { ReactElement, useContext } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ConfigContext from 'services/config';
 
@@ -37,6 +39,8 @@ function Main(): ReactElement {
 
         <Recommendations className="flex flex-grow overflow-hidden" />
       </section>
+
+      <ToastContainer position="top-right" theme="colored" />
     </div>
   );
 }

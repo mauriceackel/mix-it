@@ -6,6 +6,9 @@ import React, {
   useMemo,
   useReducer,
 } from 'react';
+import { toast } from 'react-toastify';
+
+import { invokeWrapper } from 'utils/errorBridge';
 
 import Track from 'models/Track';
 
@@ -111,7 +114,12 @@ export async function startSongServer(host: string, port: number) {
     );
   }
 
-  await window.electronApi.startSongServer(host, port);
+  try {
+    await invokeWrapper(window.electronApi.startSongServer(host, port));
+  } catch (err) {
+    toast.error('Server could not be started');
+    throw err;
+  }
 }
 
 export async function stopSongServer() {
@@ -121,5 +129,10 @@ export async function stopSongServer() {
     );
   }
 
-  await window.electronApi.stopSongServer();
+  try {
+    await invokeWrapper(window.electronApi.stopSongServer());
+  } catch (err) {
+    toast.error('Server could not be stopped');
+    throw err;
+  }
 }

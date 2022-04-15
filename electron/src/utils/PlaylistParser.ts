@@ -3,8 +3,8 @@ import fs from 'fs/promises';
 import PlistParser from 'plist';
 import { v4 as uuid } from 'uuid';
 
-import type Playlist from '@models/Playlist';
-import Track from '@models/Track';
+import type Playlist from 'models/Playlist';
+import Track from 'models/Track';
 
 async function parseITunesPlaylist(data: Buffer): Promise<Playlist[]> {
   const parser = PlistParser;

@@ -13,7 +13,8 @@
     "skipLibCheck": true,
     "baseUrl": "./src",
     "paths": {
-      "@models/*": ["../../frontend/src/models/*"]
+      "models/*": ["models/*", "../../frontend/src/models/*"],
+      "utils/*": ["utils/*", "../../frontend/src/utils/*"]
     }
   },
   "include": ["src"]
