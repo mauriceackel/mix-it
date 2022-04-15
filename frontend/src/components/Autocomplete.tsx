@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import React, { ReactElement, useCallback, useMemo, useState } from 'react';
 
 interface AutocompleteProps {
-  value: string;
-  onChange: (value: string) => void;
-  suggestions: string[] | ((value: string) => string[]);
+  value?: string;
+  onChange?: (value: string) => void;
+  suggestions?: string[] | ((value: string) => string[]);
 }
 function Autocomplete(props: AutocompleteProps): ReactElement {
-  const { value, onChange, suggestions } = props;
+  const { value = '', onChange = () => {}, suggestions = [] } = props;
 
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] =

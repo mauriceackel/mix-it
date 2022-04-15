@@ -102,7 +102,7 @@ const defaultState: PlaylistStateModel = {
   playlists: [],
   selectedPlaylists: [],
 };
-const defaultContext: PlaylistContextModel = {
+export const defaultContext: PlaylistContextModel = {
   ...defaultState,
   dispatch: () => {},
 };

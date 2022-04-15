@@ -1,8 +1,12 @@
 import { RenderOptions, render, screen } from '@testing-library/react';
 import React, { ContextType, ReactElement } from 'react';
 
-import ConfigContext from 'services/config';
-import PlaylistContext from 'services/playlists';
+import ConfigContext, {
+  defaultContext as defaultConfigContext,
+} from 'services/config';
+import PlaylistContext, {
+  defaultContext as defaultPlaylistContext,
+} from 'services/playlists';
 
 import Playlist from 'models/Playlist';
 
@@ -48,8 +52,7 @@ it('handles render without context provider', () => {
 
 it('renders playlists', () => {
   const playlistContextValue: ContextType<typeof PlaylistContext> = {
-    dispatch: () => {},
-    selectedPlaylists: [],
+    ...defaultPlaylistContext,
     playlists: [{ id: 'foobar', name: 'Test', tracks: [] }],
   };
 
@@ -62,8 +65,7 @@ it('does not mark non-selected playlists', () => {
   const playlist: Playlist = { id: 'foobar', name: 'Test', tracks: [] };
 
   const playlistContextValue: ContextType<typeof PlaylistContext> = {
-    dispatch: () => {},
-    selectedPlaylists: [],
+    ...defaultPlaylistContext,
     playlists: [playlist],
   };
 
@@ -80,7 +82,7 @@ it('marks selected playlists', () => {
   const playlist: Playlist = { id: 'foobar', name: 'Test', tracks: [] };
 
   const playlistContextValue: ContextType<typeof PlaylistContext> = {
-    dispatch: () => {},
+    ...defaultPlaylistContext,
     selectedPlaylists: [playlist],
     playlists: [playlist],
   };
@@ -98,12 +100,8 @@ it('does not show delete option', () => {
   const playlist: Playlist = { id: 'foobar', name: 'Test', tracks: [] };
 
   const playlistContextValue: ContextType<typeof ConfigContext> = {
-    dispatch: () => {},
+    ...defaultConfigContext,
     editEnabled: false,
-    autoUpdate: false,
-    host: '',
-    port: 0,
-    trackCount: 1,
   };
 
   const { container } = configContextRender(
@@ -119,12 +117,8 @@ it('shows delete option', () => {
   const playlist: Playlist = { id: 'foobar', name: 'Test', tracks: [] };
 
   const playlistContextValue: ContextType<typeof ConfigContext> = {
-    dispatch: () => {},
+    ...defaultConfigContext,
     editEnabled: true,
-    autoUpdate: false,
-    host: '',
-    port: 0,
-    trackCount: 1,
   };
 
   const { container } = configContextRender(

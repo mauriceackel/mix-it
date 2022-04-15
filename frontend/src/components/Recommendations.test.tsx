@@ -6,9 +6,15 @@ import {
 } from '@testing-library/react';
 import React, { ContextType, ReactElement } from 'react';
 
-import ConfigContext from 'services/config';
-import PlaylistContext from 'services/playlists';
-import SongContext from 'services/songs';
+import ConfigContext, {
+  defaultContext as defaultConfigContext,
+} from 'services/config';
+import PlaylistContext, {
+  defaultContext as defaultPlaylistContext,
+} from 'services/playlists';
+import SongContext, {
+  defaultContext as defaultSongContext,
+} from 'services/songs';
 
 import Playlist from 'models/Playlist';
 
@@ -56,12 +62,9 @@ it('can enable auto refresh', () => {
   const dispatch = jest.fn();
 
   const configContextValue: ContextType<typeof ConfigContext> = {
+    ...defaultConfigContext,
     dispatch,
     autoUpdate: false,
-    editEnabled: false,
-    host: '',
-    port: 0,
-    trackCount: 1,
   };
 
   configContextRender(<Recommendations />, configContextValue);
@@ -78,12 +81,9 @@ it('can disable auto refresh', () => {
   const dispatch = jest.fn();
 
   const configContextValue: ContextType<typeof ConfigContext> = {
+    ...defaultConfigContext,
     dispatch,
     autoUpdate: true,
-    editEnabled: false,
-    host: '',
-    port: 0,
-    trackCount: 1,
   };
 
   configContextRender(<Recommendations />, configContextValue);
@@ -98,18 +98,13 @@ it('can disable auto refresh', () => {
 
 it('automatically sets current song if enabled', () => {
   const configContextValue: ContextType<typeof ConfigContext> = {
-    dispatch: () => {},
+    ...defaultConfigContext,
     autoUpdate: true,
-    editEnabled: false,
-    host: '',
-    port: 0,
-    trackCount: 1,
   };
 
   // eslint-disable-next-line react/jsx-no-constructed-context-values
   const songContextValue: ContextType<typeof SongContext> = {
-    dispatch: () => {},
-    isConnected: true,
+    ...defaultSongContext,
     serverRunning: true,
     currentSong: {
       artist: 'Artist',
@@ -131,11 +126,7 @@ it('renders correct amount of rows', () => {
   const trackCount = 4;
 
   const configContextValue: ContextType<typeof ConfigContext> = {
-    dispatch: () => {},
-    autoUpdate: true,
-    editEnabled: false,
-    host: '',
-    port: 0,
+    ...defaultConfigContext,
     trackCount,
   };
 
@@ -148,12 +139,8 @@ it('prevents illegal track count', () => {
   const dispatch = jest.fn();
 
   const configContextValue: ContextType<typeof ConfigContext> = {
+    ...defaultConfigContext,
     dispatch,
-    autoUpdate: true,
-    editEnabled: false,
-    host: '',
-    port: 0,
-    trackCount: 3,
   };
 
   configContextRender(<Recommendations />, configContextValue);
@@ -178,7 +165,7 @@ it('shows searched track in results', () => {
   };
 
   const playlistContextValue: ContextType<typeof PlaylistContext> = {
-    dispatch: () => {},
+    ...defaultPlaylistContext,
     selectedPlaylists: [playlist],
     playlists: [playlist],
   };
@@ -215,7 +202,7 @@ it('shows successors/predecessors of track in results', () => {
   };
 
   const playlistContextValue: ContextType<typeof PlaylistContext> = {
-    dispatch: () => {},
+    ...defaultPlaylistContext,
     selectedPlaylists: [playlist],
     playlists: [playlist],
   };

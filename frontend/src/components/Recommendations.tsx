@@ -196,7 +196,7 @@ function Row(props: RowProps): ReactElement {
 
   return (
     <div
-      style={{ '--tw-bg-opacity': rowData.heat } as any}
+      style={{ '--tw-bg-opacity': rowData.heat } as React.CSSProperties}
       className="flex flex-col overflow-y-auto bg-pink-600 rounded"
       data-testid="trackRow"
     >

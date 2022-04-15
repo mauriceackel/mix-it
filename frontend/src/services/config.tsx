@@ -107,7 +107,7 @@ const defaultState: ConfigStateModel = {
   autoUpdate: true,
   trackCount: 3,
 };
-const defaultContext: ConfigContextModel = {
+export const defaultContext: ConfigContextModel = {
   ...defaultState,
   dispatch: () => {},
 };

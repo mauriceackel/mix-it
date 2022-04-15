@@ -65,17 +65,17 @@ function songReducer(
   }
 }
 
-const defaultSongState: SongStateModel = {
+const defaultState: SongStateModel = {
   currentSong: undefined,
   serverRunning: false,
   isConnected: false,
 };
-const defaultSongContext: SongContextModel = {
-  ...defaultSongState,
+export const defaultContext: SongContextModel = {
+  ...defaultState,
   dispatch: () => {},
 };
 
-const SongContext = React.createContext<SongContextModel>(defaultSongContext);
+const SongContext = React.createContext<SongContextModel>(defaultContext);
 export default SongContext;
 
 export function SongContextProvider(
@@ -83,7 +83,7 @@ export function SongContextProvider(
 ): ReactElement {
   const { children } = props;
 
-  const [state, dispatch] = useReducer(songReducer, defaultSongState);
+  const [state, dispatch] = useReducer(songReducer, defaultState);
 
   useEffect(() => {
     window.electronApi.onSongUpdate((track) => {
