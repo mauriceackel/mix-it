@@ -1,0 +1,209 @@
+name: Build Assets
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-mac-arm64:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: electron
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Fix version
+        id: fix-version
+        run: |
+          VERSION=$(npm --prefix="../" -s run env echo '$npm_package_version')
+          echo "::set-output name=VERSION::$VERSION"
+          npm version $VERSION --git-tag-version=false --allow-same-version
+      - name: Install Electron Dependencies
+        run: npm ci
+      - name: Install Frontend Dependencies
+        run: npm ci
+        working-directory: frontend
+      - name: Build
+        run: npm run make -- --arch=arm64
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          # Does not take working directory into account
+          asset_path: ./electron/out/make/MixIt-${{ steps.fix-version.outputs.VERSION }}-arm64.dmg
+          asset_name: MixIt-${{ steps.fix-version.outputs.VERSION }}-arm64.dmg
+          asset_content_type: application/octet-stream
+
+  build-mac-x64:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: electron
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Fix version
+        id: fix-version
+        run: |
+          VERSION=$(npm --prefix="../" -s run env echo '$npm_package_version')
+          echo "::set-output name=VERSION::$VERSION"
+          npm version $VERSION --git-tag-version=false --allow-same-version
+      - name: Install Electron Dependencies
+        run: npm ci
+      - name: Install Frontend Dependencies
+        run: npm ci
+        working-directory: frontend
+      - name: Build
+        run: npm run make -- --arch=x64
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          # Does not take working directory into account
+          asset_path: ./electron/out/make/MixIt-${{ steps.fix-version.outputs.VERSION }}-x64.dmg
+          asset_name: MixIt-${{ steps.fix-version.outputs.VERSION }}-x64.dmg
+          asset_content_type: application/octet-stream
+
+  build-lin-arm64:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: electron
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Fix version
+        id: fix-version
+        run: |
+          VERSION=$(npm --prefix="../" -s run env echo '$npm_package_version')
+          echo "::set-output name=VERSION::$VERSION"
+          npm version $VERSION --git-tag-version=false --allow-same-version
+      - name: Install Electron Dependencies
+        run: npm ci
+      - name: Install Frontend Dependencies
+        run: npm ci
+        working-directory: frontend
+      - name: Build
+        run: npm run make -- --arch=arm64
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          # Does not take working directory into account
+          asset_path: ./electron/out/make/deb/arm64/mix-it_${{ steps.fix-version.outputs.VERSION }}_arm64.deb
+          asset_name: mix-it-${{ steps.fix-version.outputs.VERSION }}-arm64.deb
+          asset_content_type: application/octet-stream
+
+  build-lin-x64:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: electron
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Fix version
+        id: fix-version
+        run: |
+          VERSION=$(npm --prefix="../" -s run env echo '$npm_package_version')
+          echo "::set-output name=VERSION::$VERSION"
+          npm version $VERSION --git-tag-version=false --allow-same-version
+      - name: Install Electron Dependencies
+        run: npm ci
+      - name: Install Frontend Dependencies
+        run: npm ci
+        working-directory: frontend
+      - name: Build
+        run: npm run make -- --arch=x64
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          # Does not take working directory into account
+          asset_path: ./electron/out/make/deb/x64/mix-it_${{ steps.fix-version.outputs.VERSION }}_amd64.deb
+          asset_name: mix-it-${{ steps.fix-version.outputs.VERSION }}-x64.deb
+          asset_content_type: application/octet-stream
+
+  build-win-arm64:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: electron
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Config npm
+        run: npm config set script-shell "C:\\Program Files\\Git\\bin\\bash.EXE"
+      - name: Fix version
+        id: fix-version
+        run: |
+          VERSION=$(npm --prefix="../" -s run env echo '$npm_package_version')
+          echo "::set-output name=VERSION::$VERSION"
+          npm version $VERSION --git-tag-version=false --allow-same-version
+      - name: Install Electron Dependencies
+        run: npm ci
+      - name: Install Frontend Dependencies
+        run: npm ci
+        working-directory: frontend
+      - name: Build
+        run: npm run make -- --arch=arm64
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          # Does not take working directory into account
+          asset_path: ./electron/out/make/squirrel.windows/arm64/MixIt-${{ steps.fix-version.outputs.VERSION }} Setup.exe
+          asset_name: MixIt-${{ steps.fix-version.outputs.VERSION }}-arm64.exe
+          asset_content_type: application/octet-stream
+
+  build-win-x64:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: electron
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Config npm
+        run: npm config set script-shell "C:\\Program Files\\Git\\bin\\bash.EXE"
+      - name: Fix version
+        id: fix-version
+        run: |
+          VERSION=$(npm --prefix="../" -s run env echo '$npm_package_version')
+          echo "::set-output name=VERSION::$VERSION"
+          npm version $VERSION --git-tag-version=false --allow-same-version
+      - name: Install Electron Dependencies
+        run: npm ci
+      - name: Install Frontend Dependencies
+        run: npm ci
+        working-directory: frontend
+      - name: Build
+        run: npm run make -- --arch=x64
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          # Does not take working directory into account
+          asset_path: ./electron/out/make/squirrel.windows/x64/MixIt-${{ steps.fix-version.outputs.VERSION }} Setup.exe
+          asset_name: MixIt-${{ steps.fix-version.outputs.VERSION }}-x64.exe
+          asset_content_type: application/octet-stream

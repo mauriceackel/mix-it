@@ -1,0 +1,23 @@
+name: Prepare Release
+on:
+  push:
+    branches: [main]
+    paths: ['frontend/**', 'electron/**']
+
+jobs:
+  increase-version:
+    if: "!startsWith(github.event.head_commit.message, '[RELEASE]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Prepare git
+        run: |
+          git config --global user.email "m.ackel@icloud.com"
+          git config --global user.name "Maurice Ackel"
+      - name: Patch Version
+        run: npm version patch -m "[RELEASE] %s"
+      - name: Push Version
+        run: git push --tags

@@ -1,0 +1,17 @@
+name: Release
+on:
+  push:
+    tags: ["v*.*.*"]
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get version
+        id: get-version
+        run: echo "::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          body: Release ${{ steps.get-version.outputs.VERSION }}
