@@ -1,6 +1,8 @@
 import { IpcMainInvokeEvent, ipcMain } from 'electron';
 import net, { Server, Socket } from 'net';
 
+import OggTransformer from 'utils/OggParser';
+import VorbisMetaTransformer, { VorbisMeta } from 'utils/VorbisParser';
 import { handlerWrapper } from 'utils/errorBridge';
 
 import Track from 'models/Track';
@@ -8,15 +10,6 @@ import Track from 'models/Track';
 // Run song server
 let server: Server;
 let connection: Socket;
-
-function cleanString(input?: string): string | undefined {
-  if (!input) return undefined;
-
-  // Remove non ASCII and non printables
-  const output = input.replace(/[^ -~]+/g, '').trim();
-
-  return output;
-}
 
 ipcMain.handle('startSongServer', handlerWrapper(startSongServer));
 
@@ -51,11 +44,16 @@ async function startSongServer(
     });
 
     // Prepare to receive incoming data
-    socket.on('data', (data) => {
-      const line = data.toString('utf-8');
-      if (line.includes('TITLE') || line.includes('ARTIST')) {
-        const title = cleanString(line.split('TITLE=')[1]?.split('vorbis')[0]);
-        const artist = cleanString(line.split('ARTIST=')[1]?.split('TITLE')[0]);
+    socket
+      .pipe(new OggTransformer())
+      .pipe(new VorbisMetaTransformer())
+      .on('data', (metaData: VorbisMeta[]) => {
+        const title = metaData.find((m) => m.key === 'title')?.value;
+        const artist = metaData.find((m) => m.key === 'artist')?.value;
+
+        if (!title && !artist) {
+          return;
+        }
 
         const track: Track = {
           title,
@@ -64,8 +62,7 @@ async function startSongServer(
 
         console.log('Detected track', JSON.stringify(track));
         ipcEvent.sender.send('songUpdate', track);
-      }
-    });
+      });
 
     // Signal Traktor that we are ready to receive the data
     socket.write('HTTP/1.0 200 OK\r\n\r\n');
