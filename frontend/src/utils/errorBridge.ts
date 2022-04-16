@@ -2,11 +2,11 @@ import type { IpcMainInvokeEvent } from 'electron';
 
 import { EncodedError, Response } from 'models/ElectronApi';
 
-type BasicListener = (event: IpcMainInvokeEvent, ...args: any[]) => any;
+type BasicListener = (event: IpcMainInvokeEvent, ...args: unknown[]) => unknown;
 
-type ErrorListener<T = any> = (
+type ErrorListener<T = unknown> = (
   event: IpcMainInvokeEvent,
-  ...args: any[]
+  ...args: unknown[]
 ) => Promise<Response<T>>;
 
 function encodeError(error: Error): EncodedError {
