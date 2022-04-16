@@ -24,13 +24,14 @@
     "forge": {
       "packagerConfig": {
         "name": "MixIt",
-        "icon": "assets/mixit.icns"
+        "icon": "assets/mixit.icns",
+        "executableName": "mix-it-electron"
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "mix_it_electron"
+            "name": "mix-it"
           }
         },
         {
@@ -39,7 +40,9 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "name": "mix-it"
+          }
         }
       ]
     }
