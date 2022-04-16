@@ -1,6 +1,6 @@
 {
   "name": "mix-it-electron",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A song recommendation tool dor DJs",
   "author": "Maurice Ackel",
   "license": "AGPL-3.0",
@@ -34,20 +34,11 @@
           }
         },
         {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ],
-          "config": {
-            "name": "MixIt"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-deb",
+          "name": "@electron-forge/maker-dmg",
           "config": {}
         },
         {
-          "name": "@electron-forge/maker-rpm",
+          "name": "@electron-forge/maker-deb",
           "config": {}
         }
       ]
@@ -63,6 +54,7 @@
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
     "@electron-forge/maker-deb": "^6.0.0-beta.63",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.63",
     "@electron-forge/maker-rpm": "^6.0.0-beta.63",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",

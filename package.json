@@ -1,0 +1,16 @@
+{
+  "name": "mix-it",
+  "version": "1.0.0",
+  "description": "A song recommendation tool for DJs",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mauriceackel/mix-it.git"
+  },
+  "author": "Maurice Ackel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mauriceackel/mix-it/issues"
+  },
+  "homepage": "https://github.com/mauriceackel/mix-it#readme"
+}
