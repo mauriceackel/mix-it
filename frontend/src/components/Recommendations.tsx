@@ -53,7 +53,7 @@ function Recommendations(props: RecommendationsProps): ReactElement {
     const searchIdx = new MiniSearch<Track & IndexedTrack>({
       fields: ['title', 'artist'],
       storeFields: ['playlistId', 'trackIndex'],
-      searchOptions: { prefix: true },
+      searchOptions: { prefix: true, combineWith: 'AND' },
     });
 
     const allTracks: (Track & IndexedTrack)[] = selectedPlaylists.flatMap(
