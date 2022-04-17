@@ -5,6 +5,7 @@ on:
 
 jobs:
   create-release:
+    if: "startsWith(github.event.head_commit.message, '[RELEASE]')"
     runs-on: ubuntu-latest
     steps:
       - name: Get version

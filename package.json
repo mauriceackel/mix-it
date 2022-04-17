@@ -2,7 +2,9 @@
   "name": "mix-it",
   "version": "1.0.1",
   "description": "A song recommendation tool for DJs",
-  "scripts": {},
+  "scripts": {
+    "release": "npm version -m '[RELEASE %s]'"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mauriceackel/mix-it.git"
