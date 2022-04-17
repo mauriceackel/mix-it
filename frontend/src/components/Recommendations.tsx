@@ -178,7 +178,7 @@ function Recommendations(props: RecommendationsProps): ReactElement {
           </Checkbox>
         </header>
 
-        <div className="grid grid-cols-1 auto-rows-fr gap-2 overflow-hidden">
+        <div className="grid grid-cols-1 auto-rows-fr gap-2 flex-grow overflow-hidden">
           {rowData.map((data) => (
             <Row key={data.id} rowData={data} />
           ))}
