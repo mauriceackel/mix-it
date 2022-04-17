@@ -24,24 +24,25 @@
     "forge": {
       "packagerConfig": {
         "name": "MixIt",
-        "icon": "assets/mixit.icns",
+        "icon": "assets/app-icons/mix-it",
         "executableName": "mix-it-electron"
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "mix-it"
-          }
+          "config": {}
         },
         {
           "name": "@electron-forge/maker-dmg",
-          "config": {}
+          "config": {
+            "icon": "assets/app-icons/mix-it.icns"
+          }
         },
         {
           "name": "@electron-forge/maker-deb",
           "config": {
-            "name": "mix-it"
+            "name": "mix-it",
+            "icon": "assets/app-icons/mix-it.png"
           }
         }
       ]

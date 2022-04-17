@@ -1,6 +1,9 @@
-# MixIt 🎧🔥
+# ![Screenshot](./electron/assets/raw-icons/32/mix-it%401x.png) MixIt 🎧🔥
 
 A song recommendation tool for DJs
+
+## Quick Look
+![Screenshot](./electron/assets/screenshots/main-app.png)
 
 ## About
 MixIt is a tool that can help you in your song selection process.
