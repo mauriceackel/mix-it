@@ -1,6 +1,6 @@
 {
   "name": "mix-it",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A song recommendation tool for DJs",
   "scripts": {
     "release": "npm version -m '[RELEASE] %s'"
