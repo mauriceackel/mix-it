@@ -45,6 +45,7 @@ The frontend communicates to the electron base via IPCs. Those calls are wrapped
 ## Building
 If you want to build a standalone application, perform the following steps:
 
+0. Make sure the dependencies are installed `npm --prefix="frontend" i && npm --prefix="electron" i`
 1. Navigate to the electron folder `cd electron`
 2. Run the make script `npm run make`
 3. The generated application will be written to the `/out` folder
