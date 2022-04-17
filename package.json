@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "A song recommendation tool for DJs",
   "scripts": {
-    "release": "npm version -m '[RELEASE %s]'"
+    "release": "npm version -m '[RELEASE] %s'"
   },
   "repository": {
     "type": "git",
