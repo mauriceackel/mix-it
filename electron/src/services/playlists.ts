@@ -12,11 +12,8 @@ async function importPlaylists(): Promise<Playlist[]> {
   const dialogResult = await dialog.showOpenDialog({
     title: 'Open playlists',
     message: 'Select playlists to open',
-    properties: ['openFile'],
-    filters: [
-      { name: 'Traktor Playlist', extensions: ['nml'] },
-      { name: 'iTunes Playlist', extensions: ['xml'] },
-    ],
+    properties: ['openFile', 'multiSelections'],
+    filters: [{ name: 'Traktor/iTunes Playlist', extensions: ['nml', 'xml'] }],
   });
 
   if (dialogResult.canceled) {
