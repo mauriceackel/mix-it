@@ -20,4 +20,4 @@ jobs:
       - name: Patch Version
         run: npm version patch -m "[RELEASE] %s"
       - name: Push Version
-        run: git push --tags
+        run: git push --follow-tags
